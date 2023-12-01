@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.LinearSlide;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.ToggleButton;
 
 @TeleOp
 public class TELEOP extends LinearOpMode {
@@ -28,6 +29,16 @@ public class TELEOP extends LinearOpMode {
         Servo outtake_rotate = hardwareMap.servo.get("outtake_rotate");
 
         LinearSlide linear_slide = new LinearSlide(hardwareMap.dcMotor.get("ls_motor"));
+
+        // setup toggle buttons for controlling outtake
+        ToggleButton x_toggle = new ToggleButton();
+        ToggleButton b_toggle = new ToggleButton();
+        ToggleButton y_toggle = new ToggleButton();
+
+        // vibrate the controller for extra driver feedback when button toggled
+        x_toggle.onToggle = () -> gamepad1.rumble(200);
+        b_toggle.onToggle = () -> gamepad1.rumble(200);
+        y_toggle.onToggle = () -> gamepad1.rumble(200);
 
         waitForStart();
 
@@ -67,9 +78,13 @@ public class TELEOP extends LinearOpMode {
             }
 
             // this controls outtake
-            to_servo.setPosition(gamepad1.x ? 0.95 : 0.85);
-            bo_servo.setPosition(gamepad1.b ? 0.3 : 0);
-            outtake_rotate.setPosition(gamepad1.y ? 0.5 : 0.925);
+            x_toggle.updateState(gamepad1.x);
+            b_toggle.updateState(gamepad1.b);
+            y_toggle.updateState(gamepad1.y);
+
+            to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.85);
+            bo_servo.setPosition(b_toggle.toggled ? 0.3 : 0);
+            outtake_rotate.setPosition(y_toggle.toggled ? 0.5 : 0.925);
 
         }
     }
