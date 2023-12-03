@@ -70,7 +70,7 @@ public class TELEOP extends LinearOpMode {
             if (gamepad1.dpad_up) {
                 linear_slide.manualMove(0.8);
             } else if (gamepad1.dpad_down) {
-                linear_slide.manualMove(-0.6);
+                linear_slide.manualMove(-0.5);
             }  else if (gamepad1.a) {
                 linear_slide.setTarget(0);
             } else {
@@ -84,7 +84,7 @@ public class TELEOP extends LinearOpMode {
 
             to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.85);
             bo_servo.setPosition(b_toggle.toggled ? 0.3 : 0);
-            outtake_rotate.setPosition(y_toggle.toggled ? 0.5 : 0.925);
+            outtake_rotate.setPosition(y_toggle.toggled ? 0.45 : 0.875);
 
         }
     }
