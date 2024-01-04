@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Autonomous
-public class AUTO_RIGHT extends LinearOpMode {
+public class Trajectories extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
