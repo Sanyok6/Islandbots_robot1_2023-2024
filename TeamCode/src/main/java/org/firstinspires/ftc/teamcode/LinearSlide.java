@@ -10,8 +10,8 @@ public class LinearSlide {
 
     // constants for PID controller
     // TODO: When motion profiling is implemented, Kd should be lowered to about 0.0003
-    public double Kp = 0.0065;
-    public double Ki = 0.0035;
+    public double Kp = 0.015;
+    public double Ki = 0.01;
     public double Kd = 0.0006;
 
     // variables for PID controller
@@ -64,7 +64,7 @@ public class LinearSlide {
 
     // returns whether the linear slide reached the target position
     public Boolean reachedTarget() {
-        return Math.abs(target-motor.getCurrentPosition()) < 5;
+        return Math.abs(target-motor.getCurrentPosition()) < 50;
     }
 
     // allows the linear slide to be moved manually, without the help of a PID controller
