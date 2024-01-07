@@ -6,9 +6,11 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.LinearSlide;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ToggleButton;
@@ -33,6 +35,8 @@ public class TELEOP extends LinearOpMode {
 
         Servo intake_lift = hardwareMap.servo.get("intake_lift");
 
+        DistanceSensor br_dist = hardwareMap.get(DistanceSensor.class, "br_dist");
+
         LinearSlide linear_slide = new LinearSlide(hardwareMap.dcMotor.get("ls_motor"));
 
         // setup toggle buttons for controlling outtake
@@ -41,7 +45,7 @@ public class TELEOP extends LinearOpMode {
         ToggleButton y_toggle = new ToggleButton();
 
         // vibrate the controller for extra driver feedback when button toggled
-        x_toggle.onToggle = () -> gamepad2.rumble(200);
+        x_toggle.onToggle = () -> {gamepad2.rumble(200); b_toggle.toggled=false;};
         b_toggle.onToggle = () -> gamepad2.rumble(200);
         y_toggle.onToggle = () -> gamepad2.rumble(200);
 
@@ -49,19 +53,29 @@ public class TELEOP extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            double x = -gamepad1.left_stick_y/(gamepad1.right_trigger > 0 ? 2.5 : 1.75);
-            double y = -gamepad1.left_stick_x/(gamepad1.right_trigger > 0 ? 2.5 : 1.75);
-            double h = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            if (!gamepad1.a) {
+                double x = -gamepad1.left_stick_y / (gamepad1.right_trigger > 0 ? 2.5 : 1.75);
+                double y = -gamepad1.left_stick_x / (gamepad1.right_trigger > 0 ? 2.5 : 1.75);
+                double h = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-            double rotatedX = x * Math.cos(-h) - y * Math.sin(-h);
-            double rotatedY = x * Math.sin(-h) + y * Math.cos(-h);
+                double rotatedX = x * Math.cos(-h) - y * Math.sin(-h);
+                double rotatedY = x * Math.sin(-h) + y * Math.cos(-h);
 
-            drive.setDrivePowers(
-                    new PoseVelocity2d(
-                            new Vector2d(rotatedX, rotatedY),
-                            -gamepad1.right_stick_x/2 - rotatedX/10 - rotatedY/12
-                    )
-            );
+                drive.setDrivePowers(
+                        new PoseVelocity2d(
+                                new Vector2d(rotatedX, rotatedY),
+                                -gamepad1.right_stick_x / 2 - rotatedX / 10 - rotatedY / 12
+                                // ^^^ compensate for weight unbalance
+                        )
+                );
+            } else {
+                drive.setDrivePowers(
+                        new PoseVelocity2d(
+                                new Vector2d(-Math.min((br_dist.getDistance(DistanceUnit.INCH)-2.75)/25, 0.3), 0),
+                                drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)/20
+                        )
+                );
+            }
 
             if (gamepad1.y) {
                 drive.imu.resetYaw();
@@ -97,9 +111,9 @@ public class TELEOP extends LinearOpMode {
 
             to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.4);
             bo_servo.setPosition(b_toggle.toggled ? 0.3 : 0);
-            outtake_rotate.setPosition(y_toggle.toggled ? 0.45 : 0.95);
+            outtake_rotate.setPosition(y_toggle.toggled ? 0.45 : x_toggle.toggled ? 0.6 : 0.95);
 
-            intake_lift.setPosition(gamepad1.dpad_right ? 0 : 0.5);
+            intake_lift.setPosition(x_toggle.toggled ? 0 : 0.5);
 
 
             // this controls airplane launcher

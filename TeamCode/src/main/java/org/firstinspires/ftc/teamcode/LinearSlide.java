@@ -10,7 +10,7 @@ public class LinearSlide {
 
     // constants for PID controller
     // TODO: When motion profiling is implemented, Kd should be lowered to about 0.0003
-    public double Kp = 0.015;
+    public double Kp = 0.01;
     public double Ki = 0.01;
     public double Kd = 0.0006;
 
