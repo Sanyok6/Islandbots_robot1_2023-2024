@@ -6,10 +6,9 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.LinearSlide;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ToggleButton;
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.teamcode.ToggleButton;
 public class TELEOP extends LinearOpMode {
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
 
         // li_servo stands for "left intake servo"
         // We use the CRServo class because the intake servos are constant rotation servos
@@ -34,8 +33,6 @@ public class TELEOP extends LinearOpMode {
 
         Servo intake_lift = hardwareMap.servo.get("intake_lift");
 
-        DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "dist");
-
         LinearSlide linear_slide = new LinearSlide(hardwareMap.dcMotor.get("ls_motor"));
 
         // setup toggle buttons for controlling outtake
@@ -48,26 +45,27 @@ public class TELEOP extends LinearOpMode {
         b_toggle.onToggle = () -> gamepad2.rumble(200);
         y_toggle.onToggle = () -> gamepad2.rumble(200);
 
+
         waitForStart();
 
         while (opModeIsActive()) {
+            double x = -gamepad1.left_stick_y/(gamepad1.right_trigger > 0 ? 2.5 : 1.75);
+            double y = -gamepad1.left_stick_x/(gamepad1.right_trigger > 0 ? 2.5 : 1.75);
+            double h = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-            if (gamepad1.a && dist.getDistance(DistanceUnit.CM) > 6) {
-                drive.setDrivePowers(new PoseVelocity2d(
-                        new Vector2d(-0.15, 0), -gamepad1.right_stick_x / 3
-                ));
-            } else {
-                drive.setDrivePowers(new PoseVelocity2d(
-                        new Vector2d(
-                                -gamepad1.left_stick_y / 2,
-                                -gamepad1.left_stick_x / 2
-                        ),
-                        -gamepad1.right_stick_x / 3
-                ));
+            double rotatedX = x * Math.cos(-h) - y * Math.sin(-h);
+            double rotatedY = x * Math.sin(-h) + y * Math.cos(-h);
+
+            drive.setDrivePowers(
+                    new PoseVelocity2d(
+                            new Vector2d(rotatedX, rotatedY),
+                            -gamepad1.right_stick_x/2 - rotatedX/10 - rotatedY/12
+                    )
+            );
+
+            if (gamepad1.y) {
+                drive.imu.resetYaw();
             }
-
-            //this drastically reduces cycle time, but we may still need to use it in future
-            //drive.updatePoseEstimate();
 
             // this controls the intake
             if (gamepad2.left_trigger > 0 || gamepad2.right_trigger > 0) {
@@ -97,11 +95,11 @@ public class TELEOP extends LinearOpMode {
             b_toggle.updateState(gamepad2.b);
             y_toggle.updateState(gamepad2.y);
 
-            to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.85);
+            to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.4);
             bo_servo.setPosition(b_toggle.toggled ? 0.3 : 0);
-            outtake_rotate.setPosition(y_toggle.toggled ? 0.45 : 0.885);
+            outtake_rotate.setPosition(y_toggle.toggled ? 0.45 : 0.95);
 
-            intake_lift.setPosition(x_toggle.toggled ? 0.1 : 0);
+            intake_lift.setPosition(gamepad1.dpad_right ? 0 : 0.5);
 
 
             // this controls airplane launcher
@@ -111,8 +109,7 @@ public class TELEOP extends LinearOpMode {
                 airplane_servo.setPosition(1);
             }
 
-
-
+            telemetry.update();
         }
     }
 }
