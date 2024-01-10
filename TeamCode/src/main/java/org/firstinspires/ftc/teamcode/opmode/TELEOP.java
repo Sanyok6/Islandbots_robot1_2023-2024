@@ -36,6 +36,7 @@ public class TELEOP extends LinearOpMode {
         Servo intake_lift = hardwareMap.servo.get("intake_lift");
 
         DistanceSensor br_dist = hardwareMap.get(DistanceSensor.class, "br_dist");
+        DistanceSensor bl_dist = hardwareMap.get(DistanceSensor.class, "bl_dist");
 
         LinearSlide linear_slide = new LinearSlide(hardwareMap.dcMotor.get("ls_motor"));
 
@@ -54,25 +55,34 @@ public class TELEOP extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (!gamepad1.a) {
-                double x = -gamepad1.left_stick_y / (gamepad1.right_trigger > 0 ? 2.5 : 1.75);
-                double y = -gamepad1.left_stick_x / (gamepad1.right_trigger > 0 ? 2.5 : 1.75);
+                double x = -gamepad1.left_stick_y;
+                double y = -gamepad1.left_stick_x;
                 double h = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+                double multiplier = gamepad1.left_trigger > 0.9 ? 0.3 : (gamepad1.right_trigger > 0.9 ? 0.8 : 0.55);
 
                 double rotatedX = x * Math.cos(-h) - y * Math.sin(-h);
                 double rotatedY = x * Math.sin(-h) + y * Math.cos(-h);
 
                 drive.setDrivePowers(
                         new PoseVelocity2d(
-                                new Vector2d(rotatedX, rotatedY),
+                                new Vector2d(rotatedX * multiplier, rotatedY * multiplier),
                                 -gamepad1.right_stick_x / 2 - rotatedX / 10 - rotatedY / 12
                                 // ^^^ compensate for weight unbalance
                         )
                 );
             } else {
+                double y = gamepad1.left_stick_y/2;
+                double d = Math.min(br_dist.getDistance(DistanceUnit.INCH), bl_dist.getDistance(DistanceUnit.INCH));
+
+                double angle = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                angle = angle < -Math.PI/2 ? angle+2*Math.PI : angle;
+                angle-=Math.PI/2;
+
                 drive.setDrivePowers(
                         new PoseVelocity2d(
-                                new Vector2d(-Math.min((br_dist.getDistance(DistanceUnit.INCH)-2.75)/25, 0.3), 0),
-                                drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)/20
+                                new Vector2d(-Math.min((d-2.75)/25, 0.3), y),
+                                Math.min(-angle, angle>0 ? -0.5 : 0.5)
                         )
                 );
             }
