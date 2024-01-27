@@ -59,7 +59,7 @@ public class TELEOP extends LinearOpMode {
                 double y = -gamepad1.left_stick_x;
                 double h = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-                double multiplier = gamepad1.left_trigger > 0.9 ? 0.3 : (gamepad1.right_trigger > 0.9 ? 0.8 : 0.55);
+                double multiplier = gamepad1.left_trigger > 0.9 ? 0.3 : (gamepad1.right_trigger > 0.9 ? 0.9 : 0.55);
 
                 double rotatedX = x * Math.cos(-h) - y * Math.sin(-h);
                 double rotatedY = x * Math.sin(-h) + y * Math.cos(-h);
@@ -67,7 +67,7 @@ public class TELEOP extends LinearOpMode {
                 drive.setDrivePowers(
                         new PoseVelocity2d(
                                 new Vector2d(rotatedX * multiplier, rotatedY * multiplier),
-                                -gamepad1.right_stick_x / 2 - rotatedX / 10 - rotatedY / 12
+                                -gamepad1.right_stick_x / 1.8 - rotatedX / 10 - rotatedY / 12
                                 // ^^^ compensate for weight unbalance
                         )
                 );

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.TeamPropDetector;
 
 @Autonomous
-public class AUTO_RED_RIGHT extends LinearOpMode {
+public class OLD_AUTO_RED_RIGHT extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -83,7 +83,7 @@ public class AUTO_RED_RIGHT extends LinearOpMode {
                 .lineToY(-30)
                 .build();
 
-
+        sleep(1000);
 
         // wait for start
         while(!isStopRequested() && !opModeIsActive()) {
