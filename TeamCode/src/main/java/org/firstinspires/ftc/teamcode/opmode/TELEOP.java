@@ -125,7 +125,7 @@ public class TELEOP extends LinearOpMode {
             y_toggle.updateState(gamepad2.y);
 
             to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.4);
-            bo_servo.setPosition(b_toggle.toggled ? 0.2 : 0.25);
+            bo_servo.setPosition(b_toggle.toggled ? 0.2 : 0.5);
             outtake_rotate.setPosition(y_toggle.toggled ? 0.25 : x_toggle.toggled ? 0.55 : 1);
 //            outtake_rotate.setPosition(y_toggle.toggled ? 0.55 : x_toggle.toggled ? 0.4 : 0.00);
 
