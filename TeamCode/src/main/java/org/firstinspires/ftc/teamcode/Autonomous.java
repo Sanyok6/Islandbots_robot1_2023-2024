@@ -87,7 +87,7 @@ public class Autonomous {
     public void afterStart() {
         Trajectories trajectories = new Trajectories(drive, startingPosition);
 
-        intake_lift.setPosition(0.5);
+        intake_lift.setPosition(0.25);
 
         Actions.runBlocking(
                 new SequentialAction(
