@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -29,7 +31,8 @@ public class TELEOP extends LinearOpMode {
         // to_servo stands for "top outtake servo", bo_servo stands for "bottom outtake servo"
         Servo to_servo = hardwareMap.servo.get("to_servo");
         Servo bo_servo = hardwareMap.servo.get("bo_servo");
-        Servo outtake_rotate = hardwareMap.servo.get("outtake_rotate");
+        ServoImplEx outtake_rotate = hardwareMap.get(ServoImplEx.class, "outtake_rotate");
+        outtake_rotate.setPwmRange(new PwmControl.PwmRange(2500, 500));
 
         Servo airplane_servo = hardwareMap.servo.get("airplane_servo");
 
@@ -120,8 +123,10 @@ public class TELEOP extends LinearOpMode {
             y_toggle.updateState(gamepad2.y);
 
             to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.4);
-            bo_servo.setPosition(b_toggle.toggled ? 0.3 : 0);
-            outtake_rotate.setPosition(y_toggle.toggled ? 0.45 : x_toggle.toggled ? 0.6 : 0.95);
+            bo_servo.setPosition(b_toggle.toggled ? 0.2 : 0.5);
+            outtake_rotate.setPosition(y_toggle.toggled ? 0.3 : x_toggle.toggled ? 0.55 : 1);
+//            outtake_rotate.setPosition(y_toggle.toggled ? 0.55 : x_toggle.toggled ? 0.4 : 0.00);
+
 
             intake_lift.setPosition(x_toggle.toggled ? 0 : 0.5);
 
