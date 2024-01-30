@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-
+import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.LinearSlide;
@@ -53,6 +53,8 @@ public class TELEOP extends LinearOpMode {
         b_toggle.onToggle = () -> gamepad2.rumble(200);
         y_toggle.onToggle = () -> gamepad2.rumble(200);
 
+        DcMotor sidePanelLED = hardwareMap.dcMotor.get("sidePanelLED");
+        sidePanelLED.setPower(-1);
 
         waitForStart();
 
@@ -123,8 +125,8 @@ public class TELEOP extends LinearOpMode {
             y_toggle.updateState(gamepad2.y);
 
             to_servo.setPosition(x_toggle.toggled ? 0.95 : 0.4);
-            bo_servo.setPosition(b_toggle.toggled ? 0.2 : 0.5);
-            outtake_rotate.setPosition(y_toggle.toggled ? 0.3 : x_toggle.toggled ? 0.55 : 1);
+            bo_servo.setPosition(b_toggle.toggled ? 0.2 : 0.25);
+            outtake_rotate.setPosition(y_toggle.toggled ? 0.25 : x_toggle.toggled ? 0.55 : 1);
 //            outtake_rotate.setPosition(y_toggle.toggled ? 0.55 : x_toggle.toggled ? 0.4 : 0.00);
 
 
