@@ -130,7 +130,7 @@ public class TELEOP extends LinearOpMode {
 //            outtake_rotate.setPosition(y_toggle.toggled ? 0.55 : x_toggle.toggled ? 0.4 : 0.00);
 
 
-            intake_lift.setPosition(x_toggle.toggled ? 0 : 0.5);
+            intake_lift.setPosition(x_toggle.toggled ? 0 : 0.22);
 
 
             // this controls airplane launcher
