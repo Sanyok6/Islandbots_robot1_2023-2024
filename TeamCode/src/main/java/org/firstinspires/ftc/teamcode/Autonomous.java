@@ -111,6 +111,33 @@ public class Autonomous {
 
     }
 
+    public void new_afterStart() {
+        Trajectories trajectories = new Trajectories(drive, startingPosition);
+
+        intake_lift.setPosition(0.22);
+
+        Actions.runBlocking(
+                new SequentialAction(
+                        trajectories.toPos2,
+                        new OuttakeIfAboveCorrectLocation(2),
+
+                        trajectories.toPos2pt3,
+                        trajectories.toPos3pt2,
+                        new OuttakeIfAboveCorrectLocation(startingPosition == StartingPosition.RedLeft ? 1 : 3),
+
+                        trajectories.toPos1,
+                        new OuttakeIfAboveCorrectLocation(startingPosition == StartingPosition.RedLeft ? 3 : 1),
+                        trajectories.toPos1pt2,
+
+                        trajectories.toBackdropPos2,
+                        trajectories.getBackdropAlignmentTrajectory(detector.position),
+
+                        new PlaceOnBackdrop()
+                )
+        );
+
+    }
+
     public class OuttakeIfAboveCorrectLocation implements Action {
         int currentLocation;
         public OuttakeIfAboveCorrectLocation(int currentLocation) {
