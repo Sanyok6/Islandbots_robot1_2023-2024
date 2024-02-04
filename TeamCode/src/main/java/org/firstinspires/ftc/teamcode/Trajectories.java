@@ -30,9 +30,6 @@ public class Trajectories {
         toPos2pt2 = drive.actionBuilder(new Pose2d(39, yCoordinate(-60), angle(90)))
                 .lineToY(yCoordinate(-35))
                 .build();
-        toPos2pt3 = drive.actionBuilder(new Pose2d(39, yCoordinate(-33.5), angle(90)))
-                .lineToY(yCoordinate(-60))
-                .build();
 
         // then align to 3rd team prop location
         toPos3pt1 = drive.actionBuilder(new Pose2d(39, yCoordinate(-35), angle(90)))
