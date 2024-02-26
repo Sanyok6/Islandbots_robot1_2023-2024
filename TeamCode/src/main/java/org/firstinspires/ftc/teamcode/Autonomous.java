@@ -126,6 +126,7 @@ public class Autonomous {
 
                         trajectories.Pos_end,
                         trajectories.getBackdropAlignmentTrajectory(detector.position),
+                        trajectories.Pos_end2, 
 
                         new PlaceOnBackdrop()
 
