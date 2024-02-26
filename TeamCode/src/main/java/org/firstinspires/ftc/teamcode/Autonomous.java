@@ -119,15 +119,15 @@ public class Autonomous {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        trajectories.Pos2
-                        //trajectories.getTeamPropPlacementTrajectory(detector.position)
+            
+                        trajectories.getTeamPropPlacementTrajectory(detector.position),
 
-                        //new OuttakeIfAboveCorrectLocation(detector.position),
+                        new OuttakeIfAboveCorrectLocation(detector.position),
 
-                        //trajectories.Pos_end,
-                        //trajectories.getBackdropAlignmentTrajectory(detector.position),
+                        trajectories.Pos_end,
+                        trajectories.getBackdropAlignmentTrajectory(detector.position),
 
-                        //new PlaceOnBackdrop()
+                        new PlaceOnBackdrop()
 
                 )
         );
