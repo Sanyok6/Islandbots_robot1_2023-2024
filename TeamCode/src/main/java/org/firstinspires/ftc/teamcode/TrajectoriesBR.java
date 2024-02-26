@@ -21,7 +21,7 @@ public class Trajectories3 {
 
 
 
-    public Trajectories3(MecanumDrive drive, StartingPosition startingPosition) {
+    public TrajectoriesBR(MecanumDrive drive, StartingPosition startingPosition) {
         this.startingPosition = startingPosition;
 
         Pos3 = drive.actionBuilder(new Pose2d(-38, yCoordinate(-60), Math.toRadians(90)))
