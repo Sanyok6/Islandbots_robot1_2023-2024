@@ -1,3 +1,4 @@
+//RedLeft
 myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-38, -60, Math.toRadians(90)))
         .lineToY(-35)
         .strafeToSplineHeading(new Vector2d(-38, -58), Math.toRadians(0))
@@ -7,6 +8,7 @@ myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-38, -60, Math.toRadia
         .strafeTo(new Vector2d(60, -60))
         .build());
 
+//RedRight
 myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
         .lineToY(-35)
         .strafeToSplineHeading(new Vector2d(15, -58), Math.toRadians(0))
@@ -15,6 +17,7 @@ myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadian
         .strafeTo(new Vector2d(60, -60))
         .build());
 
+//BlueLeft
 myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-38, 60, Math.toRadians(-90)))
         .lineToY(35)
         .strafeToSplineHeading(new Vector2d(-38, 58), Math.toRadians(0))
@@ -24,6 +27,7 @@ myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-38, 60, Math.toRadian
         .strafeTo(new Vector2d(60, 60))
         .build());
 
+//BlueRight
 myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(90)))
         .lineToY(35)
         .strafeToSplineHeading(new Vector2d(15, 58), Math.toRadians(0))
