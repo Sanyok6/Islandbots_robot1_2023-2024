@@ -40,6 +40,8 @@ public class Trajectories3 {
                 .strafeToSplineHeading(new Vector2d(-38, yCoordinate(-58)), Math.toRadians(0))
                 .strafeTo(new Vector2d(12,yCoordinate(-58)))
                 .splineTo(new Vector2d(48,yCoordinate(-38)), Math.toRadians(0))
+                .build();
+        Pos_end2 = drive.actionBuilder(new Pose2d(48, yCoordinate(-38), Math.toRadians(0)))
                 .strafeTo(new Vector2d(48, yCoordinate(-60)))
                 .strafeTo(new Vector2d(60, yCoordinate(-60)))
                 .build();
