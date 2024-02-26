@@ -112,8 +112,8 @@ public class Autonomous {
 
     }
 
-    public void new_afterStart() {
-        Trajectories3 trajectories = new Trajectories3(drive, startingPosition);
+    public void BR_afterStart() {
+        TrajectoriesBR trajectories = new TrajectoriesBR(drive, startingPosition);
 
         intake_lift.setPosition(0.22);
 
@@ -133,6 +133,68 @@ public class Autonomous {
         );
     }
 
+    public void BL_afterStart() {
+        TrajectoriesBL trajectories = new TrajectoriesBL(drive, startingPosition);
+
+        intake_lift.setPosition(0.22);
+
+        Actions.runBlocking(
+                new SequentialAction(
+            
+                        trajectories.getTeamPropPlacementTrajectory(detector.position),
+
+                        new OuttakeIfAboveCorrectLocation(detector.position),
+
+                        trajectories.Pos_end,
+                        trajectories.getBackdropAlignmentTrajectory(detector.position),
+
+                        new PlaceOnBackdrop()
+
+                )
+        );
+    }
+
+    public void RL_afterStart() {
+        TrajectoriesRL trajectories = new TrajectoriesRL(drive, startingPosition);
+
+        intake_lift.setPosition(0.22);
+
+        Actions.runBlocking(
+                new SequentialAction(
+            
+                        trajectories.getTeamPropPlacementTrajectory(detector.position),
+
+                        new OuttakeIfAboveCorrectLocation(detector.position),
+
+                        trajectories.Pos_end,
+                        trajectories.getBackdropAlignmentTrajectory(detector.position),
+
+                        new PlaceOnBackdrop()
+
+                )
+        );
+    }
+
+    public void RR_afterStart() {
+        TrajectoriesRR trajectories = new TrajectoriesRR(drive, startingPosition);
+
+        intake_lift.setPosition(0.22);
+
+        Actions.runBlocking(
+                new SequentialAction(
+            
+                        trajectories.getTeamPropPlacementTrajectory(detector.position),
+
+                        new OuttakeIfAboveCorrectLocation(detector.position),
+
+                        trajectories.Pos_end,
+                        trajectories.getBackdropAlignmentTrajectory(detector.position),
+
+                        new PlaceOnBackdrop()
+
+                )
+        );
+    }
 
     public class OuttakeIfAboveCorrectLocation implements Action {
         int currentLocation;
