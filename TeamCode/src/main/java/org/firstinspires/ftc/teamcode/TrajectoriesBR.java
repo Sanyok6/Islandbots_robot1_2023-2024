@@ -11,6 +11,7 @@ public class TrajectoriesBR {
     public Action Pos2;
     public Action Pos3;
     public Action Pos_end;
+    public Action Pos_end2;
 
     public Action toBackdropPos2;
 
