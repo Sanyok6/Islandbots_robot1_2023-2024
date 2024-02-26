@@ -29,11 +29,11 @@ public class Autonomous {
     CRServo ri_servo;
     Servo outtake_rotate;
     Servo to_servo;
-    Servo bo_servo;
     Servo intake_lift;
 
     LinearSlide linearSlide;
 
+    Servo bo_servo;
     DcMotor sidePanelLED;
 
     public Autonomous(LinearOpMode opMode, StartingPosition startingPosition) {
@@ -96,9 +96,10 @@ public class Autonomous {
 
                         trajectories.toPos3pt1,
                         trajectories.toPos3pt2,
-                        new OuttakeIfAboveCorrectLocation(startingPosition == StartingPosition.RedLeft ? 1 : 3),
 
+                        new OuttakeIfAboveCorrectLocation(startingPosition == StartingPosition.RedLeft ? 1 : 3),
                         trajectories.toPos1,
+
                         new OuttakeIfAboveCorrectLocation(startingPosition == StartingPosition.RedLeft ? 3 : 1),
                         trajectories.toPos1pt2,
 
@@ -112,31 +113,26 @@ public class Autonomous {
     }
 
     public void new_afterStart() {
-        Trajectories trajectories = new Trajectories(drive, startingPosition);
+        Trajectories3 trajectories = new Trajectories3(drive, startingPosition);
 
         intake_lift.setPosition(0.22);
 
         Actions.runBlocking(
                 new SequentialAction(
-                        trajectories.toPos2,
-                        new OuttakeIfAboveCorrectLocation(2),
+                        trajectories.Pos2
+                        //trajectories.getTeamPropPlacementTrajectory(detector.position)
 
-                        trajectories.toPos2pt3,
-                        trajectories.toPos3pt2,
-                        new OuttakeIfAboveCorrectLocation(startingPosition == StartingPosition.RedLeft ? 1 : 3),
+                        //new OuttakeIfAboveCorrectLocation(detector.position),
 
-                        trajectories.toPos1,
-                        new OuttakeIfAboveCorrectLocation(startingPosition == StartingPosition.RedLeft ? 3 : 1),
-                        trajectories.toPos1pt2,
+                        //trajectories.Pos_end,
+                        //trajectories.getBackdropAlignmentTrajectory(detector.position),
 
-                        trajectories.toBackdropPos2,
-                        trajectories.getBackdropAlignmentTrajectory(detector.position),
+                        //new PlaceOnBackdrop()
 
-                        new PlaceOnBackdrop()
                 )
         );
-
     }
+
 
     public class OuttakeIfAboveCorrectLocation implements Action {
         int currentLocation;
@@ -178,5 +174,3 @@ public class Autonomous {
             return false;
         }
     }
-
-}
