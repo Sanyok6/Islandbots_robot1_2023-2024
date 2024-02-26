@@ -6,7 +6,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-public class Trajectories3 {
+public class TrajectoriesBR {
     public Action Pos1;
     public Action Pos2;
     public Action Pos3;
