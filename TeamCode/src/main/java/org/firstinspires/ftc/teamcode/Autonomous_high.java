@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -17,7 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 // TODO: THIS CODE CAN BE MADE INTO ONE FUNCTION!!!
 
-public class Autonomous {
+public class Autonomous_high {
     public LinearOpMode opMode;
 
     public StartingPosition startingPosition;
@@ -36,7 +35,7 @@ public class Autonomous {
     Servo bo_servo;
     DcMotor sidePanelLED;
 
-    public Autonomous(LinearOpMode opMode, StartingPosition startingPosition) {
+    public Autonomous_high(LinearOpMode opMode, StartingPosition startingPosition) {
         this.opMode = opMode;
         HardwareMap hardwareMap = opMode.hardwareMap;
 
@@ -58,13 +57,13 @@ public class Autonomous {
         li_servo.setPower(0);
         ri_servo.setPower(0);
 
-        outtake_rotate = hardwareMap.servo.get("outtake_rotate");
-        outtake_rotate.setPosition(0.6);
-
         to_servo = hardwareMap.servo.get("to_servo");
         to_servo.setPosition(0.95);
         bo_servo = hardwareMap.servo.get("bo_servo");
-        bo_servo.setPosition(0);
+        bo_servo.setPosition(0.5);
+
+        outtake_rotate = hardwareMap.servo.get("outtake_rotate");
+        outtake_rotate.setPosition(0.6);
 
         intake_lift = hardwareMap.servo.get("intake_lift");
         intake_lift.setPosition(0);
@@ -112,86 +111,49 @@ public class Autonomous {
 
     }
 
-    public void BR_afterStart() {
-        TrajectoriesBR trajectories = new TrajectoriesBR(drive, startingPosition);
+    public void new_afterStart() {
+
+        Trajectories_high trajectories = new Trajectories_high(drive, startingPosition);
 
         intake_lift.setPosition(0.22);
 
         Actions.runBlocking(
                 new SequentialAction(
-            
+
                         trajectories.getTeamPropPlacementTrajectory(detector.position),
 
                         new OuttakeIfAboveCorrectLocation(detector.position),
 
                         trajectories.Pos_end,
+                        trajectories.toBackdropPos2,
                         trajectories.getBackdropAlignmentTrajectory(detector.position),
-                        trajectories.Pos_end2, 
+                        new PlaceOnBackdrop(),
+                        trajectories.getReturnPath(detector.position),
 
-                        new PlaceOnBackdrop()
+                        trajectories.Pos_end2
 
                 )
         );
     }
 
-    public void BL_afterStart() {
-        TrajectoriesBL trajectories = new TrajectoriesBL(drive, startingPosition);
+    public void new_afterStart_low() {
+        Trajectories_low trajectories = new Trajectories_low(drive, startingPosition);
 
         intake_lift.setPosition(0.22);
 
         Actions.runBlocking(
                 new SequentialAction(
-            
+
                         trajectories.getTeamPropPlacementTrajectory(detector.position),
 
                         new OuttakeIfAboveCorrectLocation(detector.position),
 
                         trajectories.Pos_end,
+                        trajectories.toBackdropPos2,
                         trajectories.getBackdropAlignmentTrajectory(detector.position),
+                        new PlaceOnBackdrop(),
 
-                        new PlaceOnBackdrop()
-
-                )
-        );
-    }
-
-    public void RL_afterStart() {
-        TrajectoriesRL trajectories = new TrajectoriesRL(drive, startingPosition);
-
-        intake_lift.setPosition(0.22);
-
-        Actions.runBlocking(
-                new SequentialAction(
-            
-                        trajectories.getTeamPropPlacementTrajectory(detector.position),
-
-                        new OuttakeIfAboveCorrectLocation(detector.position),
-
-                        trajectories.Pos_end,
-                        trajectories.getBackdropAlignmentTrajectory(detector.position),
-
-                        new PlaceOnBackdrop()
-
-                )
-        );
-    }
-
-    public void RR_afterStart() {
-        TrajectoriesRR trajectories = new TrajectoriesRR(drive, startingPosition);
-
-        intake_lift.setPosition(0.22);
-
-        Actions.runBlocking(
-                new SequentialAction(
-            
-                        trajectories.getTeamPropPlacementTrajectory(detector.position),
-
-                        new OuttakeIfAboveCorrectLocation(detector.position),
-
-                        trajectories.Pos_end,
-                        trajectories.getBackdropAlignmentTrajectory(detector.position),
-
-                        new PlaceOnBackdrop()
+                        trajectories.Pos_end2
 
                 )
         );
@@ -224,16 +186,19 @@ public class Autonomous {
             while (!linearSlide.reachedTarget() && !opMode.isStopRequested()) {
                 linearSlide.moveTowardsTarget();
             }
-            linearSlide.manualMove(0.2);
+            linearSlide.manualMove(0.22);
 
-            outtake_rotate.setPosition(0.45);
+            outtake_rotate.setPosition(1.3);
             opMode.sleep(500);
             bo_servo.setPosition(0.3);
             opMode.sleep(1000);
-            bo_servo.setPosition(0);
+            bo_servo.setPosition(0.5);
             outtake_rotate.setPosition(0.6);
             opMode.sleep(500);
 
             return false;
         }
     }
+
+}
+
